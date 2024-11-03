@@ -3,21 +3,18 @@
 
 #include <string>
 
-class Page
-{
-private:
-    std::string content;
+class Page {
+ private:
+  std::string content;
 
-public:
-    // constructor
-    Page(const std::string &content);
+ public:
+  // constructor
+  Page(const std::string& content);
 
-    // destructor
-    ~Page();
+  // destructor
+  ~Page();
 
-    // getter
-    std::string getContent() const;
+  // gtter
+  std::string getContent() const;
 };
-
-
 #endif
