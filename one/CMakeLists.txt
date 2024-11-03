@@ -16,7 +16,8 @@ else()
 endif()
 
 # Define the executable and include directories
-add_executable(${PROJECT_NAME} src/main.cpp src/Page.cpp)
+file(GLOB SOURCES "src/*.cpp")
+add_executable(${PROJECT_NAME} ${SOURCES})
 include_directories(inc)
 
 # output directory for the executable
