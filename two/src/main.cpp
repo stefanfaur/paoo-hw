@@ -72,17 +72,49 @@ int main() {
   std::vector<Book> books;
   books.push_back(Book("Moved Book", " Moved Author", 2020, "12345", {}));
 
-
-  SpecialBook specialBook3("Unmoved Book", "Some other Author", 2021, "1234567890",
-                            {}, "Joke every 5 pages");
+  SpecialBook specialBook3("Unmoved Book", "Some other Author", 2021,
+                           "1234567890", {}, "Joke every 5 pages");
 
   // using copy assignment
-  SpecialBook specialBook4("Another", "Some Author", 2021, "1234567890",
-                           {}, "Some feature");
+  SpecialBook specialBook4("Another", "Some Author", 2021, "1234567890", {},
+                           "Some feature");
   specialBook4 = specialBook;
 
   // using move assignment
   specialBook4 = std::move(specialBook3);
+
+  std::cout << " polymorphism stuff: " << std::endl;
+  std::cout << " ----------------- " << std::endl;
+
+  pageContents = {
+      "Page 1 content",
+      "Page 2 words.",
+      "Page 3 stuff.",
+  };
+
+  Book baseBook("Base Book", "Author A", 2000, "123456", pageContents);
+
+  SpecialBook derivedBook("Special Book", "Author B", 2022, "654321",
+                          pageContents, "Extra Insights");
+
+  Book* bookPtr = &baseBook;
+  bookPtr->displayInfo();  // Calls Book::displayInfo
+
+  bookPtr = &derivedBook;
+  bookPtr->displayInfo();  // calls SpecialBook::displayInfo (dynamic link)
+
+  Book& bookRef = derivedBook;
+  bookRef.displayInfo();  // calls SpecialBook::displayInfo (dynamic link)
+
+  // although all are books, displayInfo will be linked dinamically like above
+  std::vector<Book*> library;
+  library.push_back(&baseBook);
+  library.push_back(&derivedBook);
+
+  std::cout << "\nLibrary Contents:\n";
+  for (Book* book : library) {
+    book->displayInfo();  // for Book/SpecialBook depending on instance type
+  }
 
   return 0;
 }

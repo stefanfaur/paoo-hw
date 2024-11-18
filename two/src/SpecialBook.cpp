@@ -42,6 +42,13 @@ SpecialBook::~SpecialBook() {
     std::cout << "Destroying SpecialBook with feature: " << specialFeature << std::endl;
 }
 
+// override displayInfo
+void SpecialBook::displayInfo() const {
+    std::cout << "Special Book Info:" << std::endl;
+    Book::displayInfo();
+    std::cout << "Special feature: " << specialFeature << std::endl;
+}
+
 // display special feature
 void SpecialBook::displaySpecialFeature() const {
     std::cout << "Special feature of this book: " << specialFeature << std::endl;

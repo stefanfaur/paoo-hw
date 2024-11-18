@@ -25,6 +25,9 @@ public:
     // destructor
     ~SpecialBook();
 
+    // override displayInfo
+    void displayInfo() const override;
+
     // display feature
     void displaySpecialFeature() const;
 };

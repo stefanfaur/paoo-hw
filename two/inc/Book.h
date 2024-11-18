@@ -31,7 +31,7 @@ public:
     void goToBookmark();
     double computeReadingProgressPercentage() const;
     void displayCurrentPage() const;
-    void displayInfo() const;
+    virtual void displayInfo() const; 
     int getCurrentPageIndex() const;
 };
 
