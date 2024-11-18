@@ -67,6 +67,12 @@ int main() {
   // using move constructor - DISABLED
   // compile error if uncommented, as expected
   // SpecialBook specialBook3 = std::move(specialBook2);
+
+  // move constructor being used to move temp object into vector
+  std::vector<Book> books;
+  books.push_back(Book("Moved Book", " Moved Author", 2020, "12345", {}));
+
+
   SpecialBook specialBook3("Unmoved Book", "Some other Author", 2021, "1234567890",
                             {}, "Joke every 5 pages");
 
