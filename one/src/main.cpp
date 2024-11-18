@@ -30,7 +30,12 @@ int main() {
 
     std::cout << "Reading progress: " << book1.computeReadingProgressPercentage() << "%" << std::endl;
 
-    Book book2 = book1;
+    Book book2("The Clean Coder", "Robert C. Martin", 2011, "9780137081073", {});
+    book2 = book1; // assignment op wasn't getting called before as we were not assigning, but using generated copy constructor
+
+    book1.displayCurrentPage();
+    book2.displayCurrentPage();
+
     book1.turnPage();
     book1.displayCurrentPage();
     book2.displayCurrentPage();

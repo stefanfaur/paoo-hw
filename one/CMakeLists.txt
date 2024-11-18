@@ -21,4 +21,4 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 include_directories(inc)
 
 # output directory for the executable
-set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
