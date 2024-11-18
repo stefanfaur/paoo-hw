@@ -15,7 +15,8 @@ public:
     // copy constructor
     SpecialBook(const SpecialBook& other);
 
-    SpecialBook(SpecialBook&& other) noexcept;
+    // move constructor - disabled
+    SpecialBook(SpecialBook&& other) noexcept = delete;
 
     // assignment operators
     SpecialBook& operator=(const SpecialBook& other);

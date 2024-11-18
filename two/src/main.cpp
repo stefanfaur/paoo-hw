@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Book.h"
+#include "SpecialBook.h"
 
 int main() {
   std::vector<std::string> pageContents = {
@@ -44,17 +45,38 @@ int main() {
   book1.displayCurrentPage();
   book2.displayCurrentPage();
 
+  // tried to cleanup prints with this but getting double free error
+  // book1.~Book();
+  // book2.~Book();
+
   std::cout << " part two: " << std::endl;
   std::cout << " ----------------- " << std::endl;
 
-  std::vector<std::string> pages = {
-        "Page 1 content",
-        "Page 2 content",
-        "Page 3 content"
-    };
+  std::vector<std::string> pages = {"Page 1 content", "Page 2 content",
+                                    "Page 3 content"};
 
-SpecialBook book("Effective C++", "Scott Meyers", 2005, "1234567890", pages, "Additional Exercises");
-book.displayInfo();
+  SpecialBook specialBook("Effective C++", "Scott Meyers", 2005, "1234567890",
+                          pages, "Additional Exercises");
+  specialBook.displayInfo();
+  specialBook.displayInfo();
+  specialBook.displaySpecialFeature();
+
+  // using copy constructor
+  SpecialBook specialBook2 = specialBook;
+
+  // using move constructor - DISABLED
+  // compile error if uncommented, as expected
+  // SpecialBook specialBook3 = std::move(specialBook2);
+  SpecialBook specialBook3("Unmoved Book", "Some other Author", 2021, "1234567890",
+                            {}, "Joke every 5 pages");
+
+  // using copy assignment
+  SpecialBook specialBook4("Another", "Some Author", 2021, "1234567890",
+                           {}, "Some feature");
+  specialBook4 = specialBook;
+
+  // using move assignment
+  specialBook4 = std::move(specialBook3);
 
   return 0;
 }
