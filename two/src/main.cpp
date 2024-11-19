@@ -81,7 +81,9 @@ int main() {
   specialBook4 = specialBook;
 
   // using move assignment
-  specialBook4 = std::move(specialBook3);
+  // from this point on specialBook3 is in undefined state
+  SpecialBook someSpecialBook = std::move(SpecialBook("UnmovedConstructor Book", "Some other Author", 2021,
+                           "1234567890", {}, "Joke every 5 pages"));
 
   std::cout << " polymorphism stuff: " << std::endl;
   std::cout << " ----------------- " << std::endl;
@@ -104,7 +106,9 @@ int main() {
   bookPtr->displayInfo();  // calls SpecialBook::displayInfo (dynamic link)
 
   Book& bookRef = derivedBook;
-  bookRef.displayInfo();  // calls SpecialBook::displayInfo (dynamic link)
+  bookRef = SpecialBook("Special Book", "Author B", 2022, "654321",
+                        pageContents, "Extra Insights");
+  bookRef.displayInfo(); // calls SpecialBook::displayInfo (dynamic link)
 
   // although all are books, displayInfo will be linked dinamically like above
   std::vector<Book*> library;

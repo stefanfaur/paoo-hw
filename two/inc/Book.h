@@ -23,7 +23,8 @@ public:
     Book& operator=(const Book& other);
 
     // destructor
-    ~Book();
+    // makes sure derived class destructor is called even if assigned to base class reference
+    virtual ~Book();
 
     void openBook();
     void turnPage();

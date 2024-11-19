@@ -17,7 +17,18 @@ SpecialBook::SpecialBook(const SpecialBook& other)
     std::cout << "SpecialBook copy constructor called" << std::endl;
 }
 
+// move constructor
+// disabled
+// used when we want to take ownership of the source object's fields
+SpecialBook::SpecialBook(SpecialBook&& other) noexcept 
+    : Book(std::move(other)), 
+      specialFeature(std::move(other.specialFeature)) { 
+    std::cout << "SpecialBook move constructor called" << std::endl;
+}
+
+
 // copy assignment operator
+// called implicitly when source is an lvalue
 SpecialBook& SpecialBook::operator=(const SpecialBook& other) {
     if (this != &other) {
         Book::operator=(other); // Assign base class part
@@ -28,14 +39,15 @@ SpecialBook& SpecialBook::operator=(const SpecialBook& other) {
 }
 
 // move assignment operator
-SpecialBook& SpecialBook::operator=(SpecialBook&& other) noexcept {
-    if (this != &other) {
-        Book::operator=(std::move(other)); // assign base class part
-        specialFeature = std::move(other.specialFeature);
-        std::cout << "SpecialBook move assignment operator called" << std::endl;
-    }
-    return *this;
-}
+// called implicitly when source is an rvalue, just transfers ownership
+// SpecialBook& SpecialBook::operator=(SpecialBook&& other) noexcept {
+//     if (this != &other) {
+//         Book::operator=(std::move(other)); // assign base class part
+//         specialFeature = std::move(other.specialFeature);
+//         std::cout << "SpecialBook move assignment operator called" << std::endl;
+//     }
+//     return *this;
+// }
 
 // destructor
 SpecialBook::~SpecialBook() {

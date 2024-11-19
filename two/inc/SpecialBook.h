@@ -16,11 +16,11 @@ public:
     SpecialBook(const SpecialBook& other);
 
     // move constructor - disabled
-    SpecialBook(SpecialBook&& other) noexcept = delete;
+    SpecialBook(SpecialBook&& other) noexcept;
 
     // assignment operators
     SpecialBook& operator=(const SpecialBook& other);
-    SpecialBook& operator=(SpecialBook&& other) noexcept;
+    // SpecialBook& operator=(SpecialBook&& other) noexcept = 0;
 
     // destructor
     ~SpecialBook();
