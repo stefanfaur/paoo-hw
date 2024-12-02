@@ -1,8 +1,47 @@
 #include <iostream>
+#include <thread>
 #include <vector>
 
 #include "Book.h"
 #include "SpecialBook.h"
+#include "ThreadSafeLibrary.h"
+
+// ----------------------------------------------------------
+// mutex stuff
+
+void demonstrateMutex() {
+    std::cout << "\nThread Safety Demonstration:\n";
+    std::cout << "-------------------------\n";
+
+    ThreadSafeLibrary library;
+    const std::string pragmatic_prog = "9780201616224";
+    const std::string clean_coder = "9780137081073";
+
+    auto tryCheckout = [&](const std::string &isbn, const std::string &thread_name) {
+        ThreadSafeLibrary::BookCheckout checkout(library, isbn);
+        if (checkout.isCheckedOut()) {
+            std::cout << thread_name << " checked out book " << isbn << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100)); // simulate reading
+            std::cout << thread_name << " returning book " << isbn << std::endl;
+        } else {
+            std::cout << thread_name << " couldn't check out book " << isbn << std::endl;
+        }
+    };
+
+    // Create multiple threads trying to access the same books
+    std::thread reader1(tryCheckout, pragmatic_prog, "Reader 1");
+    std::thread reader2(tryCheckout, pragmatic_prog, "Reader 2");
+    std::thread reader3(tryCheckout, clean_coder, "Reader 3");
+    std::thread reader4(tryCheckout, clean_coder, "Reader 4");
+
+    reader1.join();
+    reader2.join();
+    reader3.join();
+    reader4.join();
+}
+
+// ----------------------------------------------------------
+// main
 
 int main() {
   std::vector<std::string> pageContents = {
@@ -152,9 +191,14 @@ int main() {
     std::cout << "Book 1 use count (library): " << library[0].use_count() << std::endl;
     std::cout << "Book 1 use count (anotherLibrary): " << anotherLibrary[0].use_count() << std::endl;
 
-  std::cout << " end, destructors: " << std::endl;
-  std::cout << " ----------------- " << std::endl;
+    // Mutex stuff
+    // RAII; resource acquisition is initialization
 
+    demonstrateMutex();
 
-  return 0;
+    std::cout << " end, destructors: " << std::endl;
+    std::cout << " ----------------- " << std::endl;
+
+    return 0;
 }
+
