@@ -13,3 +13,8 @@ Page::~Page() {
 
 // getter
 std::string Page::getContent() const { return content; }
+
+// setter
+void Page::setContent(const std::string& newContent) {
+    content = newContent;
+}

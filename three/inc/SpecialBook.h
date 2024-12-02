@@ -6,7 +6,7 @@
 
 class SpecialBook : public Book {
 private:
-    std::string specialFeature;
+    std::shared_ptr<std::string> specialFeature; // shared_ptr as feature can be shared between books
 
 public:
     SpecialBook(const std::string& title, const std::string& author, int year, const std::string& code, 

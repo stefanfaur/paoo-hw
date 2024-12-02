@@ -1,6 +1,7 @@
 #include "Book.h"
 
 #include <iostream>
+#include <memory>
 
 // constructor
 Book::Book(const std::string& title, const std::string& author, int year,
@@ -12,15 +13,29 @@ Book::Book(const std::string& title, const std::string& author, int year,
       code(code),
       currentPageIndex(0),
       bookmarkedPageIndex(0) {
-  for (int i = 0; i < pageContents.size(); ++i) {
-    std::string content = pageContents[i];
-    pages.emplace_back(content);
+  for (const auto& content : pageContents) {
+    pages.emplace_back(std::make_unique<Page>(content)); // create unique_ptr for each page
   }
   std::cout << "Book created: " << title << " with " << pages.size()
             << " pages." << std::endl;
 }
 
-// assignment operator override
+// copy constructor
+Book::Book(const Book& other)
+    : title(other.title),
+      author(other.author),
+      year(other.year),
+      code(other.code),
+      currentPageIndex(other.currentPageIndex),
+      bookmarkedPageIndex(other.bookmarkedPageIndex) {
+    for (const auto& page : other.pages) {
+        pages.emplace_back(std::make_unique<Page>(page->getContent())); // Deep copy
+    }
+    std::cout << "Book copied: " << title << std::endl;
+}
+
+
+// copy assignment operator override
 Book& Book::operator=(const Book& other) {
   if (this != &other) {  // Self-assignment check
     title = other.title;
@@ -29,10 +44,40 @@ Book& Book::operator=(const Book& other) {
     code = other.code;
     currentPageIndex = other.currentPageIndex;
     bookmarkedPageIndex = other.bookmarkedPageIndex;
-    pages = other.pages;  // Use the vector's assignment
+    // deep copy of pages
+    pages.clear();
+    for (const auto& page : other.pages) {
+      pages.emplace_back(std::make_unique<Page>(page->getContent()));
+    }
   }
   std::cout << "Book assigned: " << title << std::endl;
   return *this;
+}
+
+// move constructor
+Book::Book(Book&& other) noexcept
+    : title(std::move(other.title)),
+      author(std::move(other.author)),
+      year(other.year),
+      code(std::move(other.code)),
+      currentPageIndex(other.currentPageIndex),
+      bookmarkedPageIndex(other.bookmarkedPageIndex),
+      pages(std::move(other.pages)) { // Move pages
+    std::cout << "Book moved: " << title << std::endl;
+}
+
+Book& Book::operator=(Book&& other) noexcept {
+    if (this != &other) {
+        title = std::move(other.title);
+        author = std::move(other.author);
+        year = other.year;
+        code = std::move(other.code);
+        currentPageIndex = other.currentPageIndex;
+        bookmarkedPageIndex = other.bookmarkedPageIndex;
+        pages = std::move(other.pages); // Move pages
+    }
+    std::cout << "Book move-assigned: " << title << std::endl;
+    return *this;
 }
 
 // destructor
@@ -75,7 +120,7 @@ double Book::computeReadingProgressPercentage() const {
 
 void Book::displayCurrentPage() const {
   std::cout << "Page " << currentPageIndex + 1 << ": "
-            << pages[currentPageIndex].getContent() << std::endl;
+            << pages[currentPageIndex]->getContent() << std::endl;
 }
 
 void Book::displayInfo() const {
@@ -84,3 +129,11 @@ void Book::displayInfo() const {
 }
 
 int Book::getCurrentPageIndex() const { return currentPageIndex; }
+
+void Book::markAllPages() {
+  for (auto& page : pages) {  // Iterate over unique_ptr<Page>
+    page->setContent("MARKED TOUCHED");  // Dereference unique_ptr to access Page
+  }
+  std::cout << "All pages in the book '" << title
+            << "' have been marked as 'MARKED TOUCHED'." << std::endl;
+}

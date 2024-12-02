@@ -110,15 +110,41 @@ int main() {
                         pageContents, "Extra Insights");
   bookRef.displayInfo(); // calls SpecialBook::displayInfo (dynamic link)
 
+
+  // Smart pointers stuff
+
   // although all are books, displayInfo will be linked dinamically like above
-  std::vector<Book*> library;
-  library.push_back(&baseBook);
-  library.push_back(&derivedBook);
+  std::vector<std::shared_ptr<Book>> library;
+
+  library.push_back(std::make_shared<Book>("Base Book", "Author A", 2000,
+                                           "123456", pageContents));
+  library.push_back(std::make_shared<SpecialBook>("Special Book", "Author B",
+                                                  2022, "654321", pageContents,
+                                                  "Extra Insights"));
 
   std::cout << "\nLibrary Contents:\n";
-  for (Book* book : library) {
-    book->displayInfo();  // for Book/SpecialBook depending on instance type
+  for (const auto& book :
+       library) {         // Use auto& to iterate over shared_ptr<Book>
+    book->displayInfo();  // call displayInfo() on the dereferenced shared_ptr (polymorphic call here)
   }
+
+  std::cout << " unique pointer test: " << std::endl;
+  std::cout << " ----------------- " << std::endl;
+
+  // call markAllPages on the first book in the library
+  library[0]->markAllPages();
+  // first book will be 'marked' but second book will not be
+
+  std::cout << "\nLibrary Contents:\n";
+  for (const auto& book :
+       library) {         // Use auto& to iterate over shared_ptr<Book>
+    book->displayCurrentPage();  // call displayInfo() on the dereferenced shared_ptr (polymorphic call here)
+  }
+
+
+  std::cout << " end, destructoring: " << std::endl;
+  std::cout << " ----------------- " << std::endl;
+
 
   return 0;
 }

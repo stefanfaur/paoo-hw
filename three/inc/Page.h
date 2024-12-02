@@ -16,5 +16,8 @@ class Page {
 
   // gtter
   std::string getContent() const;
+
+  // setter
+  void setContent(const std::string& newContent);
 };
 #endif

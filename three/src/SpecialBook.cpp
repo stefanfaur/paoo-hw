@@ -4,7 +4,7 @@
 // constructor
 SpecialBook::SpecialBook(const std::string& title, const std::string& author, int year, const std::string& code, 
                          const std::vector<std::string>& pageContents, const std::string& feature)
-    : Book(title, author, year, code, pageContents), specialFeature(feature) {
+    : Book(title, author, year, code, pageContents), specialFeature(std::make_shared<std::string>(feature)) {
     std::cout << "SpecialBook created by constructor with feature: " << specialFeature << std::endl;
 }
 
