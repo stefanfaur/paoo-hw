@@ -114,35 +114,45 @@ int main() {
   // Smart pointers stuff
 
   // although all are books, displayInfo will be linked dinamically like above
-  std::vector<std::shared_ptr<Book>> library;
+ std::vector<std::shared_ptr<Book>> library;
 
-  library.push_back(std::make_shared<Book>("Base Book", "Author A", 2000,
-                                           "123456", pageContents));
-  library.push_back(std::make_shared<SpecialBook>("Special Book", "Author B",
-                                                  2022, "654321", pageContents,
-                                                  "Extra Insights"));
+    library.push_back(std::make_shared<Book>("Base Book", "Author A", 2000,
+                                             "123456", pageContents));
+    library.push_back(std::make_shared<SpecialBook>("Special Book", "Author B",
+                                                    2022, "654321", pageContents,
+                                                    "Extra Insights"));
 
-  std::cout << "\nLibrary Contents:\n";
-  for (const auto& book :
-       library) {         // Use auto& to iterate over shared_ptr<Book>
-    book->displayInfo();  // call displayInfo() on the dereferenced shared_ptr (polymorphic call here)
-  }
+    std::cout << "\nLibrary Contents:\n";
+    for (const auto& book : library) {
+        book->displayInfo();  // polymorphic call to displayInfo()
+    }
 
-  std::cout << " unique pointer test: " << std::endl;
-  std::cout << " ----------------- " << std::endl;
+    // another library showing shared ownership
+    std::vector<std::shared_ptr<Book>> anotherLibrary;
 
-  // call markAllPages on the first book in the library
-  library[0]->markAllPages();
-  // first book will be 'marked' but second book will not be
+    // share books between two libraries
+    for (const auto& book : library) {
+        anotherLibrary.push_back(book);  // share ownership
+    }
 
-  std::cout << "\nLibrary Contents:\n";
-  for (const auto& book :
-       library) {         // Use auto& to iterate over shared_ptr<Book>
-    book->displayCurrentPage();  // call displayInfo() on the dereferenced shared_ptr (polymorphic call here)
-  }
+    std::cout << "\nAnother Library Contents (Shared):\n";
+    for (const auto& book : anotherLibrary) {
+        book->displayInfo();  // polymorphic call to displayInfo()
+    }
 
+    // mark all pages in the first book to show unique ownership
+    library[0]->markAllPages();
+    library[0]->displayCurrentPage();
+    library[1]->displayCurrentPage();
+    anotherLibrary[0]->displayCurrentPage();
+    anotherLibrary[1]->displayCurrentPage();
 
-  std::cout << " end, destructoring: " << std::endl;
+    // Demonstrating shared ownership
+    std::cout << "\nOwnership Demonstration:\n";
+    std::cout << "Book 1 use count (library): " << library[0].use_count() << std::endl;
+    std::cout << "Book 1 use count (anotherLibrary): " << anotherLibrary[0].use_count() << std::endl;
+
+  std::cout << " end, destructors: " << std::endl;
   std::cout << " ----------------- " << std::endl;
 
 
